@@ -1,0 +1,110 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace _2017_10_31_Esercizio_Casa
+{
+    class Program
+    {
+        static void DrawBoard(int x, int y, int width, int height)
+        {
+            Console.SetCursorPosition(x, y);
+            Console.Write("╔");
+            Console.SetCursorPosition(x + 1, y);
+            for (int i = 0; i < width - 1; i++)
+            {
+                Console.Write("═");
+            }
+            Console.Write("╗");
+            Console.SetCursorPosition(x, y + height);
+            Console.Write("╚");
+            Console.SetCursorPosition(x + 1, y + height);
+            for (int i = 0; i < width - 1; i++)
+            {
+                Console.Write("═");
+            }
+            Console.Write("╝");
+            Console.SetCursorPosition(x, y + 1);
+            for (int i = 0; i < height; i++)
+            {
+                Console.Write("║");
+                Console.SetCursorPosition(x, y + 1 + i);
+            }
+            Console.SetCursorPosition(x + width, y + 1);
+            for (int i = 0; i < height; i++)
+            {
+                Console.Write("║");
+                Console.SetCursorPosition(x + width, y + 1 + i);
+            }
+        }
+        static void DrawCharacterAt(char c, int x, int y)
+        {
+            Console.SetCursorPosition(x, y);
+            Console.Write(c);
+        }
+        static void MoveCharacter(char direction, ref int x, ref int y, int widthOffset, int heightOffset, int width, int height)
+        {
+            DrawCharacterAt(' ', x, y);
+            switch (direction)
+            {
+                case 'w':
+                    if (y > heightOffset + 1)
+                    {
+                        y--;
+                    }
+                    break;
+                case 's':
+                    if (y < height + heightOffset - 1)
+                    {
+                        y++;
+                    }
+                    break;
+                case 'a':
+                    if (x > widthOffset + 1)
+                    {
+                        x--;
+                    }
+                    break;
+                case 'd':
+                    if (x < width + widthOffset - 1)
+                    {
+                        x++;
+                    }
+                    break;
+            }
+            DrawCharacterAt('@', x, y);
+        }
+        static void Main(string[] args)
+        {
+            int width = 31;
+            int height = 16;
+            int widthOffset = Console.WindowWidth / 2 - width / 2;
+            int heightOffset = Console.WindowHeight / 2 - height / 2;
+            int playerX = widthOffset + width / 2;
+            int playerY = heightOffset + height / 2;
+            DrawBoard(widthOffset, heightOffset, width, height);
+            DrawCharacterAt('@', playerX, playerY);
+            Console.SetCursorPosition(widthOffset + 1, heightOffset + height + 1);
+            Console.Write("Write [exit] to exit");
+            do
+            {
+                Console.SetCursorPosition(widthOffset + 1, heightOffset + height + 2);
+                Console.Write(">                                                   ");
+                Console.SetCursorPosition(widthOffset + 2, heightOffset + height + 2);
+                string controlDirection = Console.ReadLine().ToLower();
+                if (controlDirection.Length == 1)
+                {
+                    char direction = char.Parse(controlDirection);
+                    MoveCharacter(direction, ref playerX, ref playerY, widthOffset, heightOffset, width, height);
+                }
+                if (controlDirection == "exit")
+                {
+                    break;
+                }
+            }
+            while (true);
+        }
+    }
+}
